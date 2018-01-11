@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>2048</title>
+<style type=text/css>
+	html,body{
+		height:100%;
+		overflow:hidden;}
+	#div1{
+		text-align:center;
+		position:absolute;
+		left:50%;
+
+		top:40%;
+		-webkit-transform: translateX(-50%) translateY(-50%);
+		-ms-transform: translateX(-50%) translateY(-50%);
+		-o-transform: translateX(-50%) translateY(-50%);
+		transform: translateX(-50%) translateY(-50%);
+		transition: 0.3s;
+		border: 1px solid #000;
+	}
+
+	table{
+		border:#000 1px solid;
+		text-align:center;
+		font-size:36px;
+		transition: 0.3s;
+		margin: 0 auto;
+
+	}
+	table tr td{
+		border:#000 1px solid;
+		width:100px;
+		height:100px;
+		background:rgba(0,0,0,0.5);
+		transition: 0.3s;
+	}
+	input[type=button]{
+		width: 50%;
+		height: 30px;
+		float: left;
+	}
+</style>
+
+</head>
+<body>
+<div id="div1">
+<font size="5px">2048</font>
+<table id="table">
+	<tr>
+	    <td id="0"></td>
+	    <td id="1"></td>
+	    <td id="2"></td>
+	    <td id="3"></td>
+    </tr>
+    <tr>
+	    <td id="4"></td>
+	    <td id="5"></td>
+	    <td id="6"></td>
+	    <td id="7"></td>
+    </tr>
+    <tr>
+	    <td id="8"></td>
+	    <td id="9"></td>
+	    <td id="10"></td>
+	    <td id="11"></td>
+    </tr>
+    <tr>
+	    <td id="12"></td>
+	    <td id="13"></td>
+	    <td id="14"></td>
+	    <td id="15"></td>
+    </tr>
+</table>
+<input type="button" value="开始" onclick="begin()" />
+<input type="button" value="重新开始" onclick="reset()" />
+</div>
+</body>
+<script type="text/javascript">
+	var gridGround=new Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+	//函数赋值
+	function equil(i){
+		document.getElementById(i).innerHTML=gridGround[i]}
+	//开始游戏
+	function begin(){
+		for(var i=0;i<16;i++){
+		equil(i)}
+		var j=0;
+		for(var i=0;i<16;i++){
+			if(gridGround[i]!=0){
+				j++}}
+			if(j==0){
+				while(true){
+				var r1=parseInt(Math.random()*16);
+				var r2=parseInt(Math.random()*16);
+				if(r1!=r2){
+					break}};
+				gridGround[r1]=2;
+				equil(r1);
+				gridGround[r2]=2;
+				equil(r2);}
+			else{alert('Gameover')}
+				disable();}
+	
+	//设定操作
+		document.onkeydown=function(e){
+			var nkc=e.which;
+			if(nkc==37){
+					leftOrRight(-1,0);}
+			else if(nkc==38){
+					upOrDown(-1,0);}
+			else if(nkc==39){
+					leftOrRight(1,15);}
+			else if(nkc==40){
+					upOrDown(1,15);}
+			else if(event.keyCode == 32){	
+				event.stopPropagation();//防止事件冒泡。
+				event.preventDefault();//阻止空格触发pageDown滚动页面
+			}
+		}
+	//游戏移步算法
+		//左右移步
+		function leftOrRight(x,y){
+			for(var i=0;i<16;i+=4){
+				var newArray=new Array(0,0,0,0);
+				var k=0;
+				var n=0;
+				for(var j=i;j<i+4;j++){
+					if(gridGround[x*(y-j)]!=0){
+						newArray[k]=gridGround[x*(y-j)];
+						k++;}}
+				if(newArray[0]==newArray[1]){
+					newArray[0]*=2;
+					newArray[1]=newArray[2];
+					newArray[2]=newArray[3];
+					newArray[3]=0;}
+				if(newArray[1]==newArray[2]){
+					newArray[1]*=2;
+					newArray[2]=newArray[3];
+					newArray[3]=0;}
+				if(newArray[2]==newArray[3]){
+					newArray[2]*=2;
+					newArray[3]=0;}
+				for(var j=i;j<i+4;j++){
+					gridGround[x*(y-j)]=newArray[n];
+					n++;}
+				for(var j=i;j<i+4;j++){
+					equil(x*(y-j));}
+				}
+				randomNumber();
+				disable();
+				changeColor();
+			}
+		//上下移步
+		function upOrDown(x,y){
+			for(var i=0;i<4;i++){
+				var newArray=new Array(0,0,0,0);
+				var k=0;
+				var n=0;
+				for(var j=i;j<i+13;j+=4){
+					if(gridGround[x*(y-j)]!=0){
+						newArray[k]=gridGround[x*(y-j)];
+						k++;}}
+				if(newArray[0]==newArray[1]){
+					newArray[0]*=2;
+					newArray[1]=newArray[2];
+					newArray[2]=newArray[3];
+					newArray[3]=0;}
+				if(newArray[1]==newArray[2]){
+					newArray[1]*=2;
+					newArray[2]=newArray[3];
+					newArray[3]=0;}
+				if(newArray[2]==newArray[3]){
+					newArray[2]*=2;
+					newArray[3]=0;}
+				for(var j=i;j<i+13;j+=4){
+					gridGround[x*(y-j)]=newArray[n];
+					n++;}
+				for(var j=i;j<i+13;j+=4){
+					equil(x*(y-j));}
+				}
+				randomNumber();
+				disable();
+				changeColor();
+			}
+	//产生随机数2并判断游戏是否结束
+		function randomNumber(){
+			var newArray2=new Array();
+			var blug=true;
+			while(blug){
+			var r3=parseInt(Math.random()*16);
+			for(var i=0;i<16;i++){
+				if(gridGround[i]==0){
+					newArray2.push(gridGround[i]);}}
+				if(newArray2.length>0){
+					if(gridGround[r3]==0){
+				blug=false}}
+				else{
+					alert("gameover")
+					document.getElementById("table").disabled=true;
+					r3=null;
+					blug=false;}
+			}
+			gridGround[r3]=2;
+			equil(r3);}
+	//隐藏值0
+	function disable(){
+		for(var i=0;i<16;i++){
+			if(gridGround[i]==0){
+				document.getElementById(i).innerHTML=null}}}
+	//重置
+	function reset(){
+		document.location.reload();}
+	//改变颜色
+	function changeColor(){
+		for(var i=0;i<16;i++){
+			if(gridGround[i]!=0){
+			var x=255-gridGround[i];
+	document.getElementById(i).style.backgroundColor="rgba(255,255,"+x+",0.5)";}
+	else{
+	document.getElementById(i).style.backgroundColor="rgba(0,0,0,0.5)";}}}
+</script>
+ 
