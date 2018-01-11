@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+	*{
+		margin: 0px;
+		padding: 0px;
+		text-align: center;
+		-webkit-user-select:none;
+	    -moz-user-select:none;
+	    -ms-user-select:none;
+	    user-select:none;
+	}
+	ul{
+		width: 600px;
+		height: 600px;
+		margin: 50px auto 10px;
+		border:1px solid #000;
+		overflow: hidden;
+		position: relative;
+		/* transform:rotate(45deg); */
+	}
+	ul li{
+		list-style: none;
+		border: 1px solid #000;
+		float: left;
+		box-sizing:border-box;
+		font-family: 'Arial';
+		text-align:center;
+		cursor: pointer;
+	}
+	button{
+		width: 100px;
+		height: 30px;
+	}
+	p{
+		line-height: 50px;
+	}
+	.rotateFalse{
+		color:#fff;
+		-webkit-transform: rotateY(-180deg);
+		-ms-transform: rotateY(-180deg);
+		-o-transform: rotateY(-180deg);
+		transform: rotateY(-180deg);
+		-webkit-transition: 0.3s;
+		-o-transition: 0.3s;
+		transition: 0.3s;
+	}
+	.rotateTrue{
+		color:#000;
+		-webkit-transform: rotateY(0deg);
+		-ms-transform: rotateY(0deg);
+		-o-transform: rotateY(0deg);
+		transform: rotateY(0deg);
+		-webkit-transition: 0.5s;
+		-o-transition: 0.5s;
+		transition: 0.5s;
+	}
+	#reload{
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		width: 60px;
+		height: 60px;
+		border-radius: 80px;
+		border: 1px solid #000;
+		background:rgba(0,0,0,.5);
+
+	}
+	</style>
+</head>
+<body>
+<input type="button" value="ylms">
+<input type="button" value="nlms">
+
+</body>
+</html>
+<script type="text/javascript" src="jquery.js"></script>
+<script>
+function move(){
+	$('body').html('');
+	var level = 4,
+		numArr = new Array(),
+		LiNumArr = new Array(),
+		ClickArr = new Array()
+		flagArr = new Array(),
+		startNum = 10,
+		randomtimer = '',
+		starttimer= '',
+		result = 0;
+	$('body').append("<ul></ul>")
+			 .append("<p id='length'><p>")
+			 .append("<button id='pluslevel_btn'>+level</button>")
+			 .append("<button id='start_btn'>start</button>");
+	var newLi_Style="<style id='newstyle'>ul li{width:"+$('ul').width()/level+"px;height:"+$('ul').height()/level+"px;line-height:"+$('ul').height()/level+"px;font-size:"+($('ul').width()/level)*0.5+"px;}</style>";
+	$('body').append(newLi_Style);
+	if($('#pluslevel_btn') && $('#start_btn')){
+		$('#pluslevel_btn').on('mousedown',function(){
+			if(level*level<324){
+				level+=2;//奇数会留一格
+				newDom.addLi(level*level-$('li').length);
+				$('#newstyle').remove();
+				$('body').append(newLi_Style);
+				
+			}else{
+				$('#pluslevel_btn').html("Max").attr('disabled','disabled');
+			}
+		})
+		$('#start_btn').on('mousedown',function(){
+
+			$('#pluslevel_btn').remove();
+
+			clearInterval(starttimer);
+			var startNum2 = level*(level/2);
+			$('#start_btn').attr('disabled','disabled')
+			starttimer = setInterval(function(){
+				startNum--;
+				startNum2--;
+				$('#start_btn').html(startNum2);
+				if(startNum<=7){
+					clearInterval(randomtimer);
+				}
+
+				if(startNum2<=0){
+					clearInterval(starttimer);
+					$('ul li').attr('class','rotateFalse').text('');
+					$('body').append("<input type='button' value='reload' id='reload'>");
+					if($('#reload')){
+						restart();
+					}
+
+				}
+			},1000);
+				randomtimer = setInterval(function(){
+						newDom.addNum();
+					},10)
+			
+		})
+	}
+
+
+	var newDom = {
+		addLi:function(len){
+			$('#length').text("Num："+ level*level);
+			for(var i=0;i<len;i++){
+				$('ul').append("<li></li>");
+				newLi_Style = "<style id='newstyle'>ul li{width:"+$('ul').width()/level+"px;height:"+$('ul').height()/level+"px;line-height:"+$('ul').height()/level+"px;font-size:"+($('ul').width()/level)*0.5+"px;}</style>";
+				numArr.push(numArr.length+1);
+			}
+			$('ul li').addClass('rotateTrue');
+			newDom.addNum();
+		},
+		addNum:function(){
+			numArr.length = $('li').length/2;
+			LiNumArr.length = '';
+			for(var i=0;i<numArr.length;i++){
+				LiNumArr.push(numArr[i]);
+				LiNumArr.push(numArr[i]);
+			}
+
+			/*(function(){
+				LiNumArr = function(){ LiNumArr.sort(function(){
+        			return Math.random() - 0.5;
+        		})ul li:nth-child(1)
+			}})();*/
+			
+			LiNumArr.sort(function(){return Math.random() - 0.5;})
+
+			$('ul li').on('mousedown',function(){
+				/*console.debug($(this).index())*/
+				if($(this).hasClass('rotateFalse')){
+					$(this).text(LiNumArr[$(this).index()]);
+					$(this).attr('class','rotateTrue');
+					ClickArr.push($(this).index());
+					/*flagArr.push($(this).index());
+					console.debug(ClickArr);*/
+					if(ClickArr.length==2){
+						if(LiNumArr[ClickArr[0]]===LiNumArr[ClickArr[1]]){
+							ClickArr.length = '';
+							result++;
+							$('#start_btn').html(result);
+						}else{
+							setTimeout(function(){
+								$('ul li').eq(ClickArr[0]).attr('class','rotateFalse').text('');
+								$('ul li').eq(ClickArr[1]).attr('class','rotateFalse').text('');
+								ClickArr.shift();
+								ClickArr.shift();
+							},300)
+							
+						}
+
+					}
+				}else{
+					var meDom = $(this);
+					setTimeout(function(){
+						meDom.css('background','red');
+						setTimeout(function(){
+							meDom.removeAttr('style');
+						},100)
+					},1)
+					
+				}
+				
+			})
+
+
+			$.each($('li'),function(index){
+				$('li').eq(index).text(LiNumArr[index]);
+			})
+		},
+	}
+
+	newDom.addLi(level*level);
+	/*newDom.addNum();*/
+	function restart(){
+		$('#reload').on('mousedown',function(){
+		move();
+	})
+	}
+	
+}
+move();
+
+</script>
