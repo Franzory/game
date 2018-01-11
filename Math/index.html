@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<link rel="stylesheet" href="css/style.css?ver=1">
+<title></title>
+<style>
+
+
+</style>
+</head>
+<body>
+<div id="startBox">
+	<button></button>
+</div>
+<div class="container">
+	<p class="startTimeBox hidden">3</p>
+	<p class="startTimeBox hidden">2</p>
+	<p class="startTimeBox hidden">1</p>
+	<button></button>
+	
+	<div id="time">
+			<div id="time_child"></div>
+		</div>
+	
+	<div id="MathBox">
+		<b id="bout"></b>
+		
+		<p id="num_1"></p>
+		<p id="operator"></p>
+		<p id="num_2"></p>
+		<p id="equal">=</p>
+		<p id="result"></p>
+		<span id='hand'></span>
+<!-- 		<span id='yellowline'></span>
+<span id='redline'></span>
+<span id='redline_child'></span> -->
+
+	</div>
+	<div id="touchBox">
+		<input type='button' value="" id="touchNum_1">
+		<input type='button' value="" id="touchNum_2">
+		<input type='button' value="" id="touchNum_3">
+	</div>
+	<p id="hint" style="display:none"></p>
+	<div id="judge_box"></div>
+	<div id="restart_box">
+		<button id="restart_btn"></button>
+	</div>
+
+</div>
+</body>
+</html>
+<script src="js/Franzory.js"></script>
+<script src="js/game.js?ver=2"></script>

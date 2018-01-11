@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<title>Document</title>
+</head>
+<style type="text/css">
+*{
+	margin: 0px;
+	padding: 0px;
+}
+html,body{
+		height: 100%;
+		width: 100%;
+
+	}
+	#startBox{
+		width: 100%;
+		height: 100%;
+		background: url('img/start.png');
+		background-size: cover;
+		position: fixed;
+		top: 0px;
+		left: 0px;
+		z-index: 999;
+		-webkit-transition: 0.3s;
+		-o-transition: 0.3s;
+		transition: 0.3s;
+		/*display: none;*/
+	}
+	#startBox button{
+		width: 190px;
+		height: 65px;
+		outline: none;
+		position: absolute;
+		right: 40px;
+		top: 20px;
+		opacity: 0;
+/* 		-webkit-transform: translateX(-50%);
+-ms-transform: translateX(-50%);
+-o-transform: translateX(-50%);
+transform: translateX(-50%); */
+
+	}
+	#bout{
+		text-align: center;
+	}
+
+	#result{
+		width: 20px;
+		height: 20px;
+		border-bottom: 1px solid #000;
+	}
+	#touchBox{
+		clear: both;
+		text-align: center;
+	}
+	#touchBox input{
+		width:40px;
+		height: 30px;
+	}
+	#MathBox{
+		width: 150px;
+		border: 1px solid #000;
+		height: 40px;
+		position: relative;
+		overflow: hidden;
+		margin: 20px auto;
+
+	}
+	#MathBox #hand{
+		display: block;
+		width: 22px;
+		height: 25px;
+		background: url('img/hand.png') no-repeat;
+		background-size:cover;
+		position: absolute;
+		z-index: 999;
+		top: 0px;
+		left: 0%;
+		opacity: 0;
+
+		-webkit-transition: 0.1s;
+		-o-transition: 0.1s;
+		transition: 0.1s;
+	}
+	#MathBox p{
+		width: 20%;
+		float: left;
+		text-align: center;
+		-webkit-transition:transform 0.4s;
+		-o-transition:transform 0.4s;
+		transition:transform 0.4s;
+		height: 25px;
+		/*transform-origin:top;*/
+	}
+	#yellowline,#redline{
+		position: absolute;
+		display: block;
+		width: 50%;
+		height: 5px;
+		float: left;
+		bottom: 0px;
+	}
+	#yellowline{
+		background: rgba(255,0,0,0.1);
+	}
+	#redline_child{
+		position: absolute;
+		display: block;
+		height: 5px;
+		bottom: 0px;
+		background: rgba(255,0,0,1);
+		width: 0%;
+		-webkit-transition: 0.3s;
+		-o-transition: 0.3s;
+		transition: 0.3s;
+	}
+	#redline{
+		right: 0px;
+		background: rgba(255,0,0,0.3);
+	}
+	#hint{
+		border: 1px solid #ccc;
+		cursor: pointer;
+		display: block;
+		width: 60px;
+		margin: 20px auto;
+		color: #ccc;
+		display: none;
+	}
+	#hint:hover{
+		border: 1px solid #000;
+		color: #000;
+
+
+	}
+</style>
+<body>
+<div id="startBox">
+	<button></button>
+</div>
+<p id="bout"></p>
+	<div id="MathBox">
+		<p id="num_1"></p>
+		<p id="operator"></p>
+		<p id="num_2"></p>
+		<p id="equal">=</p>
+		<p id="result"></p>
+		<span id='hand'></span>
+		<span id='yellowline'></span>
+		<span id='redline'></span>
+		<span id='redline_child'></span>
+
+	</div>
+	<div id="touchBox">
+		<input type='button' value="" id="touchNum_1">
+		<input type='button' value="" id="touchNum_2">
+		<input type='button' value="" id="touchNum_3">
+	</div>
+	<!-- <p id="hint"></p> -->
+</body>
+</html>
+<script src="js/Franzory.js"></script>
+<script type="text/javascript">
+Select('#startBox').getElementsByTagName('button')[0].onmousedown = function(){
+	Select('#startBox').style.cssText+="transform:scale(0)";
+	move();
+}
+
+function move(){
+	var bout = 0;
+	var NumArr = new Array();
+	var operatorArr = ['+','-'];
+	var resultTrue = 0;
+	var resultArr = new Array();
+	// hintNum = 3;
+		for(let i=0;i<10;i++){
+			NumArr.push(i);
+		}
+
+	var randomNum_1 = parseInt(NumArr[Math.round(Math.random()*9)]);
+	var randomNum_2 = parseInt(NumArr[Math.round(Math.random()*9)]);
+	var randomNum_3 = 0;
+	var randomNumIndex = [0,2];
+	Select('#MathBox').getElementsByTagName('p')[randomNumIndex[0]].innerHTML = randomNum_1;
+
+	Select('#MathBox').getElementsByTagName('p')[randomNumIndex[1]].innerHTML = randomNum_2;
+
+
+function action(){
+
+	Select('#bout').innerHTML = 'score：'+bout;
+/*	if(Select('#hint')){
+		Select('#hint').innerHTML = 'hint：'+hintNum;
+	}*/
+	randomNum_1 = parseInt(NumArr[Math.round(Math.random()*9)]);
+
+	randomNumIndex.sort(function(){
+		return Math.random()-0.5;
+	})
+	if(bout!=0){
+		if(bout>10){
+			Select('#MathBox').getElementsByTagName('p')[randomNumIndex[0]].style.cssText += 'color:#fff;border-bottom:1px solid #000';
+			Select('#MathBox').getElementsByTagName('p')[randomNumIndex[1]].style.cssText += 'color:#000;border:none';
+			Select('#result').style.cssText += 'border:none';
+			setTimeout(function(){
+				handMove.show(randomNumIndex[1]);
+			},400)
+		}/*else if(bout>4){
+			if(hintNum!=0){
+			Select('#hint').style.cssText +='display:block';
+
+			}
+		}*/else{
+			Select('#MathBox').getElementsByTagName('p')[randomNumIndex[0]].style.cssText += "transform:scale(1,0);-0-transform:scale(1,0);-webkit-transform:scale(1,0);";
+		
+			setTimeout(function(){
+				handMove.show(randomNumIndex[1]);
+				for(let i=0;i<3;i++){
+					Select('#MathBox').getElementsByTagName('p')[i].removeAttribute('style');
+				}
+			},400)
+		}
+		
+	}
+	
+/*	randomNum_2 =parseInt(Select('#MathBox').getElementsByTagName('p')[randomNumIndex[1]].innerHTML);	
+
+	randomNum_2 = parseInt(Select('#MathBox').getElementsByTagName('p')[2].innerHTML);*/
+
+	Select('#MathBox').getElementsByTagName('p')[randomNumIndex[0]].innerHTML = randomNum_1;
+
+/*else{
+	Select('#MathBox').getElementsByTagName('p')[randomNumIndex[0]].style.cssText+='border-bottom: 1px solid #000;';
+	Select('#result').innerHTML = resultTrue;
+}*/
+
+
+	// console.log(Select('#MathBox').getElementsByTagName('p')[0]);
+	// Select('#num_1').innerHTML = randomNum_1;
+	// Select('#num_2').innerHTML = randomNum_2;
+	
+	var operatorN = operatorArr[Math.round(Math.random()*1)];
+	Select('#operator').innerHTML = operatorN;
+
+	switch(operatorN){
+		case '+':
+			resultTrue = parseInt(Select('#MathBox').getElementsByTagName('p')[0].innerHTML) + parseInt(Select('#MathBox').getElementsByTagName('p')[2].innerHTML)
+		break;
+		case '-':
+			resultTrue = parseInt(Select('#MathBox').getElementsByTagName('p')[0].innerHTML) - parseInt(Select('#MathBox').getElementsByTagName('p')[2].innerHTML)
+		break;
+	}
+	// console.error(parseInt(Select('#MathBox').getElementsByTagName('p')[0].innerHTML)+' '+parseInt(Select('#MathBox').getElementsByTagName('p')[2].innerHTML))
+	// console.warn(resultTrue);
+	resultArr.length = '';
+	if(bout>10){
+		resultArr.push(randomNum_1);
+		resultArr.push(randomNum_1-(Math.ceil(Math.random()*2)));
+		resultArr.push(randomNum_1+(Math.ceil(Math.random()*2)));
+		Select('#result').innerHTML = resultTrue;
+	}else{
+		resultArr.push(resultTrue);
+		resultArr.push(resultTrue-(Math.ceil(Math.random()*2)));
+		resultArr.push(resultTrue+(Math.ceil(Math.random()*2)));
+	}
+
+	
+
+	resultArr.sort(function(){
+			return Math.random()-0.5;
+		});
+	for(let i=0;i<Select('#touchBox').getElementsByTagName('input').length;i++){
+			Select('#touchBox').getElementsByTagName('input')[i].value = resultArr[i];
+			// Select('#touchBox').getElementsByTagName('input')[i].onmousedown = function(){}
+		}
+}
+	action();
+	Select('#touchBox').onmousedown = function(event){
+		event = event || window.event;
+		var target = event.target || event.srcElement;
+		console.debug(target.value);
+		switch(target.id){
+			case 'touchNum_1':judge(target.value);break;
+			case 'touchNum_2':judge(target.value);break;
+			case 'touchNum_3':judge(target.value);break;
+		}
+	}
+/*	Select('#hint').onmousedown = function(){
+		hintNum--;
+		let thiss = this;
+		Select('#hint').innerHTML = 'hint：'+hintNum;
+		Select('#hand').style.cssText += "opacity:0";
+		setTimeout(function(){
+			Select('#hand').style.cssText += "opacity:1";
+			if(hintNum==0){
+				 thiss.parentNode.removeChild(thiss)
+			}
+		},500)
+	}*/
+	function judge(objValue){
+		if(bout<=10){
+			if(objValue==resultTrue){
+				handMove.hide();
+				bout++;
+				Select('#bout').innerHTML = 'score：'+bout;
+				Select('#redline_child').style.cssText+='width:'+bout+'0%';
+				Select('#hand').style.cssText += "opacity:"+bout/5+"";
+				action();
+			}else{
+				alert('over');
+			}
+		}else{
+			if(objValue==randomNum_1){
+				handMove.hide();
+				bout++;
+				Select('#redline_child').style.cssText+='background:#ffae44';
+				Select('#bout').innerHTML = 'score：'+bout;
+				Select('#hand').style.cssText += "opacity:"+bout/5+"";
+				action();
+			}else{
+				alert('over');
+			}
+		}
+	}
+	var handMove = {
+		hide:function(){
+			Select('#hand').style.cssText += "top:1px;";
+		},
+		show:function(leftIndex){
+			Select('#hand').style.cssText += "top:1px;left:"+leftIndex*2+"0%";
+		}
+	}
+	/*var action = {
+
+	}*/
+	
+}
+	
+</script>
